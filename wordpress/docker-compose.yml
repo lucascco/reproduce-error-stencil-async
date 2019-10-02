@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    command: "--default-authentication-plugin=mysql_native_password"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: bpks7suec
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456
+  wordpress:
+    image: wordpress:4.9.8
+    container_name: wordpress
+    restart: always
+    volumes:
+      - ./wp:/var/www/html/
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: bpks7suec
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: 123456
+    ports:
+      - 8080:80
+      - 443:443
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 3333:80
+    volumes:
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORT: wp123456
